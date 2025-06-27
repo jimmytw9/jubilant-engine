@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>Network Config</title>
+<style>
+  table { border-collapse: collapse; margin-top: 20px; }
+  th, td { border: 1px solid #000; padding: 4px 8px; text-align: center; }
+  #add-row { margin-top: 10px; }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<table id="config-table">
+  <thead>
+    <tr>
+      <th>VLAN</th>
+      <th>Port-1</th>
+      <th>Port-2</th>
+      <th>Port-3</th>
+      <th>Port-4</th>
+      <th>COLOR</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><input type="text" class="vlan-input" /></td>
+      <td><input type="checkbox" /></td>
+      <td><input type="checkbox" /></td>
+      <td><input type="checkbox" /></td>
+      <td><input type="checkbox" /></td>
+      <td>
+        <select class="color-select">
+          <option value="紅">紅</option>
+          <option value="橙">橙</option>
+          <option value="黃">黃</option>
+          <option value="綠">綠</option>
+          <option value="藍">藍</option>
+          <option value="靛">靛</option>
+          <option value="紫">紫</option>
+        </select>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<button id="add-row">+</button>
+<script>
+$(function(){
+  function validateVlan($input){
+    var val = $input.val().trim();
+    if(val === ''){ return true; }
+    var pattern = /^\d{1,4}(\s*,\s*\d{1,4})*$/;
+    if(!pattern.test(val)){
+      alert('VLAN\u683C\u5F0F\u932F\u8AA4\uFF0C\u8ACB\u4EE5\u9017\u865F\u5206\u9694\u4E26\u6BCF\u7D44\u6700\u591A4\u4F4D\u6578\u5B57');
+      $input.focus();
+      return false;
+    }
+    return true;
+  }
+
+  $('#config-table').on('blur', '.vlan-input', function(){
+    validateVlan($(this));
+  });
+
+  $('#add-row').on('click', function(){
+    var rowCount = $('#config-table tbody tr').length;
+    if(rowCount >= 8){
+      alert('\u6700\u591A\u53EA\u80FD\u65B0\u589E8\u5217');
+      return;
+    }
+    var $newRow = $('#config-table tbody tr:first').clone();
+    $newRow.find('input[type="text"]').val('');
+    $newRow.find('input[type="checkbox"]').prop('checked', false);
+    $newRow.find('select').prop('selectedIndex',0);
+    $('#config-table tbody').append($newRow);
+  });
+});
+</script>
+</body>
+</html>
